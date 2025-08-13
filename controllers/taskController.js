@@ -1,4 +1,6 @@
 const Task = require("../models/task");
+const taskController = require("../controllers/taskController");
+
 
 // Task oluşturma
 exports.createTask = async (req, res) => {
@@ -20,6 +22,17 @@ exports.createTask = async (req, res) => {
   }
 };
 
+
+// Sadece kendi görevlerini listele
+
+exports.getMyTasks = async(req,res)=>{
+  try{
+    const tasks = await Task.find({createdBy: req.user.id})
+    res.json(tasks)
+  }catch(error){
+    res.status(500).json({message:"Server Error"})
+  }
+}
 // Tüm görevleri listele (admin için)
 exports.getAllTasks = async (req, res) => {
   try {
